@@ -30,7 +30,7 @@
 CC = gcc  
 CFLAGS = -O3 -I$(HOME)/include
 
-ALL =	galois.o jerasure.o reed_sol.o cauchy.o liberation.o
+ALL =	galois.o jerasure.o reed_sol.o cauchy.o liberation.o piggyback_rs.o lrc_reed_sol.o
 
 all: $(ALL)
 
@@ -46,4 +46,5 @@ jerasure.o: jerasure.h galois.h
 reed_sol.o: jerasure.h galois.h reed_sol.h
 cauchy.o: jerasure.h galois.h cauchy.h
 liberation.o: jerasure.h galois.h liberation.h
-
+piggyback_rs.o: jerasure.h reed_sol.h galois.h piggyback_rs.c
+lrc_reed_sol.o: jerasure.h reed_sol.h galois.h lrc_reed_sol.c

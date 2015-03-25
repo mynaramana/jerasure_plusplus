@@ -49,12 +49,16 @@ ALL =	jerasure_01 \
         liberation_01 \
 		encoder \
 		decoder \
+	piggy_back_rs_01\
+	lrc_reed_sol_01\
+#	repair\
 
 all: $(ALL)
 
 clean:
 	rm -f core *.o $(ALL) a.out cauchy.h cauchy.c liberation.h liberation.c reed_sol.c reed_sol.h\
-              jerasure.c jerasure.h galois.c galois.h
+              jerasure.c jerasure.h galois.c galois.h\
+	      piggyback_rs.c piggyback_rs.h lrc_reed_sol.c lrc_reed_sol.h
 
 .SUFFIXES: .c .o
 .c.o:
@@ -89,6 +93,18 @@ galois.h: ../galois.h
 
 galois.c: ../galois.c
 	rm -f galois.c ; cp ../galois.c . ; chmod 0444 galois.c
+
+piggyback_rs.c: ../piggyback_rs.c
+	rm -f piggyback_rs.c ; cp ../piggyback_rs.c . ; chmod 0444 piggyback_rs.c
+
+piggyback_rs.h: ../piggyback_rs.h
+	rm -f piggyback_rs.h ; cp ../piggyback_rs.h . ; chmod 0444 piggyback_rs.h
+
+lrc_reed_sol.c: ../lrc_reed_sol.c
+	rm -f lrc_reed_sol.c ; cp ../lrc_reed_sol.c . ; chmod 0444 lrc_reed_sol.c
+
+lrc_reed_sol.h: ../lrc_reed_sol.h
+	rm -f lrc_reed_sol.h ; cp ../lrc_reed_sol.h . ; chmod 0444 lrc_reed_sol.h
 
 galois.o: galois.h
 jerasure.o: jerasure.h galois.h
@@ -141,6 +157,14 @@ reed_sol_04.o: galois.h reed_sol.h jerasure.h
 reed_sol_04: reed_sol_04.o galois.o jerasure.o reed_sol.o
 	$(CC) $(CFLAGS) -o reed_sol_04 reed_sol_04.o reed_sol.o jerasure.o galois.o
 
+piggy_back_rs_01.o:galois.h reed_sol.h jerasure.h piggyback_rs.h
+piggy_back_rs_01: piggy_back_rs_01.o galois.o jerasure.o reed_sol.o piggyback_rs.o
+	$(CC) $(CFLAGS) -o piggy_back_rs_01 piggy_back_rs_01.o piggyback_rs.o reed_sol.o jerasure.o galois.o
+
+lrc_reed_sol_01.o:galois.h reed_sol.h jerasure.h lrc_reed_sol.h
+lrc_reed_sol_01: lrc_reed_sol_01.o galois.o jerasure.o reed_sol.o lrc_reed_sol.o
+	$(CC) $(CFLAGS) -o lrc_reed_sol_01 lrc_reed_sol_01.o lrc_reed_sol.o reed_sol.o jerasure.o galois.o
+
 cauchy_01.o: galois.h cauchy.h jerasure.h
 cauchy_01: cauchy_01.o galois.o jerasure.o cauchy.o
 	$(CC) $(CFLAGS) -o cauchy_01 cauchy_01.o cauchy.o jerasure.o galois.o
@@ -161,10 +185,14 @@ liberation_01.o: galois.h liberation.h jerasure.h
 liberation_01: liberation_01.o galois.o jerasure.o liberation.o
 	$(CC) $(CFLAGS) -o liberation_01 liberation_01.o liberation.o jerasure.o galois.o
 
-encoder.o: galois.h liberation.h jerasure.h reed_sol.h cauchy.h
-encoder: encoder.o galois.o jerasure.o liberation.o reed_sol.o cauchy.o
-	$(CC) $(CFLAGS) -o encoder encoder.o liberation.o jerasure.o galois.o reed_sol.o cauchy.o
+encoder.o: galois.h liberation.h jerasure.h reed_sol.h cauchy.h piggyback_rs.h encoder.c lrc_reed_sol.h
+encoder: encoder.o galois.o jerasure.o liberation.o reed_sol.o cauchy.o piggyback_rs.o lrc_reed_sol.o
+	$(CC) $(CFLAGS) -o encoder encoder.o liberation.o jerasure.o galois.o reed_sol.o cauchy.o piggyback_rs.o lrc_reed_sol.o
 
-decoder.o: galois.h liberation.h jerasure.h reed_sol.h cauchy.h
-decoder: decoder.o galois.o jerasure.o liberation.o reed_sol.o cauchy.o
-	$(CC) $(CFLAGS) -o decoder decoder.o liberation.o jerasure.o galois.o reed_sol.o cauchy.o
+decoder.o: galois.h liberation.h jerasure.h reed_sol.h cauchy.h piggyback_rs.h lrc_reed_sol.h
+decoder: decoder.o galois.o jerasure.o liberation.o reed_sol.o cauchy.o piggyback_rs.o lrc_reed_sol.o
+	$(CC) $(CFLAGS) -o decoder decoder.o liberation.o jerasure.o galois.o reed_sol.o cauchy.o piggyback_rs.o lrc_reed_sol.o
+
+repair.o: galois.h liberation.h jerasure.h reed_sol.h cauchy.h piggyback_rs.h lrc_reed_sol.h
+repair: repair.o galois.o jerasure.o liberation.o reed_sol.o cauchy.o piggyback_rs.o lrc_reed_sol.o
+	$(CC) $(CFLAGS) -o repair repair.o liberation.o jerasure.o galois.o reed_sol.o cauchy.o piggyback_rs.o lrc_reed_sol.o

@@ -242,6 +242,7 @@ void ReadDataFromFile(int ind, int DataBit, int FirstHalf, int size, char* data_
   fclose(fp);
 
 }
+
 void piggyback1_rs_repair( int k, int m, int w, int* matrix, int* erasures, char** data, char** coding, int size, char* curdir, char* cs1, char* cs2, int n){
   char *temp, *var;
   int temp_;

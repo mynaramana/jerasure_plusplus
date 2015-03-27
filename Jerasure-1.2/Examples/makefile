@@ -51,7 +51,7 @@ ALL =	jerasure_01 \
 		decoder \
 	piggy_back_rs_01\
 	lrc_reed_sol_01\
-#	repair\
+	#repair\
 
 all: $(ALL)
 
